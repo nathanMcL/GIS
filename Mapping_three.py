@@ -3,10 +3,14 @@
 # Use grid coordinates pulled from traceroute.py
 # Plot grid coordinates using longitude and latitude
 # Calculate the distance between the plotted points
-# Border the United States in green
+# Border the United States in black
+# Inserted county border overlay
 # Border the Counties in purple
+# Inserted bodies of water overlay, in light blue
+# Inserted national forests overlay, in green
 
 # The program runs slow
+# MtnRange turns things red, maybe needs different overlay
 
 
 import geopandas as gpd
@@ -43,6 +47,15 @@ us_states = us_states[us_states['iso_a3'] == 'USA']
 # Read US counties shapefile
 us_counties = gpd.read_file("tl_2019_us_county.shp")
 
+# Read Bodies of Water shapefile
+bodies_of_water = gpd.read_file("ne_10m_geography_marine_polys.shp")
+
+# Read Mountain Ranges shapefile (make sure the file exists in your directory)
+mountain_ranges = gpd.read_file("ne_10m_geography_regions_polys.shp")
+
+# Read Forests shapefile (make sure the file exists in your directory)
+national_forests = gpd.read_file("S_USA.AdministrativeRegion.shp")
+
 # Create a single plot with subplots (here only one)
 fig, ax = plt.subplots(1, 1)
 
@@ -50,10 +63,19 @@ fig, ax = plt.subplots(1, 1)
 world.boundary.plot(ax=ax)
 
 # Plot US state boundaries
-us_states.boundary.plot(ax=ax, color='green')
+us_states.boundary.plot(ax=ax, color='black')
 
 # Plot US county boundaries
 us_counties.boundary.plot(ax=ax, color='purple')
+
+# Plot bodies of water and fill them with color
+bodies_of_water.plot(ax=ax, facecolor='lightblue')
+
+# Plot mountain ranges *** turns things red ***
+#mountain_ranges.plot(ax=ax, color='brown')
+
+# Plot national forests
+national_forests.plot(ax=ax, color='green')
 
 # Plot and label points
 for point in coordinates:
